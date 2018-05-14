@@ -6,7 +6,7 @@ using ProjectManagement.BLL.Services.Base;
 using ProjectManagement.DAL.Contracts.Domain;
 using ProjectManagement.DAL.Contracts.Repositories;
 using System.Collections.Generic;
-
+using System.Linq;
 
 namespace ProjectManagement.BLL.Services
 {
@@ -18,7 +18,9 @@ namespace ProjectManagement.BLL.Services
 
         public IEnumerable<ProjectDto> GetByKeyword(string keyword)
         {
-            throw new System.NotImplementedException();
+            Ensure.String.IsNotNullOrWhiteSpace(keyword);
+            return GetAll().Where(x =>
+                x.Information.Contains(keyword) || x.Name.Contains(keyword) || x.ShortInformation.Contains(keyword));
         }
     }
 }
