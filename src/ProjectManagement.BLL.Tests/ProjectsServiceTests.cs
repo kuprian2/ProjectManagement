@@ -90,6 +90,88 @@ namespace ProjectManagement.BLL.Tests
             new TestCaseData(NonExistingIdentifiers[2]),
         };
 
+        private static object[] EntitiesExistingIdentifiersCases = new object[]
+        {
+            new object[]
+            {
+                new Project
+                {
+                    Id = 1,
+                    Name = "Project11111",
+                    CreatureDate = new DateTime(2001, 1, 1),
+                    Information = "Info11111",
+                    ShortInformation = "Short info11111"
+                },
+                new ProjectDto
+                {
+                    Id = 1,
+                    Name = "Project11111",
+                    CreatureDate = new DateTime(2001, 1, 1),
+                    Information = "Info11111",
+                    ShortInformation = "Short info11111"
+                }
+            },
+            new object[]
+            {
+                new Project
+                {
+                    Id = 2,
+                    Name = "Project22222",
+                    CreatureDate = new DateTime(2002, 2, 2),
+                    Information = "Info22222",
+                    ShortInformation = "Short info22222"
+                },
+                new ProjectDto
+                {
+                    Id = 2,
+                    Name = "Project11111",
+                    CreatureDate = new DateTime(2002, 2, 2),
+                    Information = "Info22222",
+                    ShortInformation = "Short info22222"
+                }
+            }
+        };
+        private static object[] EntitiesNonExistingIdentifiersCases = new object[]
+        {
+            new object[]
+            {
+                new Project
+                {
+                    Id = 4,
+                    Name = "Project4",
+                    CreatureDate = new DateTime(2004, 4, 4),
+                    Information = "Info4",
+                    ShortInformation = "Short info4"
+                },
+                new ProjectDto
+                {
+                    Id = 4,
+                    Name = "Project4",
+                    CreatureDate = new DateTime(2004, 4, 4),
+                    Information = "Info4",
+                    ShortInformation = "Short info4"
+                }
+            },
+            new object[]
+            {
+                new Project
+                {
+                    Id = 5,
+                    Name = "Project55555",
+                    CreatureDate = new DateTime(2005, 5, 5),
+                    Information = "Info55555",
+                    ShortInformation = "Short info55555"
+                },
+                new ProjectDto
+                {
+                    Id = 5,
+                    Name = "Project55555",
+                    CreatureDate = new DateTime(2005, 5, 5),
+                    Information = "Info55555",
+                    ShortInformation = "Short info55555"
+                }
+            }
+        };
         private readonly IMapper _mapper;
 
         public ProjectsServiceTests()
@@ -168,6 +250,38 @@ namespace ProjectManagement.BLL.Tests
             _testingProjectsService.Delete(id);
 
             deleted.Should().BeFalse();
+        }
+
+        [TestCaseSource(typeof(ProjectsServiceTests), nameof(EntitiesExistingIdentifiersCases))]
+        public void Update_ShouldChangeItemInRepository_WhenExistingIdInRepository(Project project, ProjectDto projectDto)
+        {
+            var updated = false;
+            _projectRepositoryMock = new Mock<IRepository<Project>>(MockBehavior.Strict);
+            _projectRepositoryMock.Setup(p => p.Update(project)).Callback(() =>
+            {
+                updated = Projects.Exists(x => x.Id == project.Id);
+            });
+            _testingProjectsService = new ProjectsService(_projectRepositoryMock.Object, _mapper);
+
+            _testingProjectsService.Update(projectDto);
+
+            updated.Should().BeTrue();
+        }
+
+        [TestCaseSource(typeof(ProjectsServiceTests), nameof(EntitiesNonExistingIdentifiersCases))]
+        public void Update_ShouldNotChangeRepository_WhenNonExistingIdInRepository(Project project, ProjectDto projectDto)
+        {
+            var updated = false;
+            _projectRepositoryMock = new Mock<IRepository<Project>>(MockBehavior.Strict);
+            _projectRepositoryMock.Setup(p => p.Update(project)).Callback(() =>
+            {
+                updated = Projects.Exists(x => x.Id == project.Id);
+            });
+            _testingProjectsService = new ProjectsService(_projectRepositoryMock.Object, _mapper);
+
+            _testingProjectsService.Update(projectDto);
+
+            updated.Should().BeFalse();
         }
     }
 }

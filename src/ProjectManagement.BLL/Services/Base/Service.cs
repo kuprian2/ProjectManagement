@@ -47,7 +47,8 @@ namespace ProjectManagement.BLL.Services.Base
 
         public void Delete(int id)
         {
-            throw new System.NotImplementedException();
+            Ensure.Any.IsNotDefault(id);
+            _repository.Delete(id);
         }
     }
 }
