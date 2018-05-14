@@ -283,5 +283,37 @@ namespace ProjectManagement.BLL.Tests
 
             updated.Should().BeFalse();
         }
+
+        [TestCaseSource(typeof(ProjectsServiceTests), nameof(EntitiesExistingIdentifiersCases))]
+        public void Create_ShouldNotChangeRepository_WhenExistingIdInRepository(Project project, ProjectDto projectDto)
+        {
+            var created = false;
+            _projectRepositoryMock = new Mock<IRepository<Project>>(MockBehavior.Strict);
+            _projectRepositoryMock.Setup(p => p.Create(project)).Callback(() =>
+            {
+                created = !Projects.Exists(x => x.Id == project.Id);
+            });
+            _testingProjectsService = new ProjectsService(_projectRepositoryMock.Object, _mapper);
+
+            _testingProjectsService.Create(projectDto);
+
+            created.Should().BeTrue();
+        }
+
+        [TestCaseSource(typeof(ProjectsServiceTests), nameof(EntitiesNonExistingIdentifiersCases))]
+        public void Create_ShouldCreateNewItemInRepository_WhenNonExistingIdInRepository(Project project, ProjectDto projectDto)
+        {
+            var created = false;
+            _projectRepositoryMock = new Mock<IRepository<Project>>(MockBehavior.Strict);
+            _projectRepositoryMock.Setup(p => p.Create(project)).Callback(() =>
+            {
+                created = !Projects.Exists(x => x.Id == project.Id);
+            });
+            _testingProjectsService = new ProjectsService(_projectRepositoryMock.Object, _mapper);
+
+            _testingProjectsService.Create(projectDto);
+
+            created.Should().BeFalse();
+        }
     }
 }

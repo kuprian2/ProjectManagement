@@ -42,7 +42,8 @@ namespace ProjectManagement.BLL.Services.Base
 
         public void Update(TEntityDto entityDto)
         {
-            throw new System.NotImplementedException();
+            Ensure.Any.IsNotNull(entityDto);
+            _repository.Update(_mapper.Map<TEntity>(entityDto));
         }
 
         public void Delete(int id)
