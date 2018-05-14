@@ -135,5 +135,39 @@ namespace ProjectManagement.BLL.Tests
 
             result.Should().BeNull();
         }
+
+        [TestCaseSource(typeof(ProjectsServiceTests), nameof(CorrectIdentifiersCases))]
+        public void Delete_ShouldReduceRepositoryCapacityCountByOne_WhenExistingId(int id)
+        {
+            var deleted = false;
+            _projectRepositoryMock = new Mock<IRepository<Project>>(MockBehavior.Strict);
+            _projectRepositoryMock.Setup(p => p.Delete(id)).Callback(() =>
+            {
+                //current stub
+                deleted = Projects.Exists(x => x.Id == id);
+            });
+            _testingProjectsService = new ProjectsService(_projectRepositoryMock.Object, _mapper);
+
+            _testingProjectsService.Delete(id);
+
+            deleted.Should().BeTrue();
+        }
+
+        [TestCaseSource(typeof(ProjectsServiceTests), nameof(IncorrectIdentifiersCases))]
+        public void Delete_ShouldNotChangeRepository_WhenNonExistingId(int id)
+        {
+            var deleted = false;
+            _projectRepositoryMock = new Mock<IRepository<Project>>(MockBehavior.Strict);
+            _projectRepositoryMock.Setup(p => p.Delete(id)).Callback(() =>
+            {
+                //current stub
+                deleted = Projects.Exists(x => x.Id == id);
+            });
+            _testingProjectsService = new ProjectsService(_projectRepositoryMock.Object, _mapper);
+
+            _testingProjectsService.Delete(id);
+
+            deleted.Should().BeFalse();
+        }
     }
 }

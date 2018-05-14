@@ -23,15 +23,15 @@ namespace ProjectManagement.BLL.Services.Base
 
         public TEntityDto Get(int id)
         {
-            throw new System.NotImplementedException();
+            Ensure.Any.IsNotDefault(id);
+            var entity = _repository.Get(id);
+            return _mapper.Map<TEntityDto>(entity);
         }
 
         public IEnumerable<TEntityDto> GetAll()
         {
             var entities = _repository.GetAll();
-
             Ensure.Any.IsNotNull(entities);
-
             return _mapper.Map<IEnumerable<TEntityDto>>(entities);
         }
 
