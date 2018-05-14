@@ -172,6 +172,25 @@ namespace ProjectManagement.BLL.Tests
                 }
             }
         };
+
+        private static object[] FilteringCasesWhenExistItemsToFind = new object[]
+        {
+            new object[] {"Info", new List<ProjectDto>(ProjectDtos)},
+            new object[] {"iNfO", new List<ProjectDto>(ProjectDtos)},
+            new object[] {"1", new List<ProjectDto> {ProjectDtos[0]}},
+            new object[] {"2", new List<ProjectDto> {ProjectDtos[1]}},
+            new object[] {"3", new List<ProjectDto> {ProjectDtos[2], ProjectDtos[2]}},
+            new object[] {"i", new List<ProjectDto>(ProjectDtos)},
+        };
+
+        private static object[] FilteringCasesWhenNotExistItemsToFind = new object[]
+        {
+            new object[] {"sargdr"},
+            new object[] {"shjdukflgil"},
+            new object[] {"fydklipopop"},
+            new object[] {"23415"},
+        };
+
         private readonly IMapper _mapper;
 
         public ProjectsServiceTests()
@@ -314,6 +333,31 @@ namespace ProjectManagement.BLL.Tests
             _testingProjectsService.Create(projectDto);
 
             created.Should().BeFalse();
+        }
+
+        [TestCaseSource(typeof(ProjectsServiceTests), nameof(FilteringCasesWhenExistItemsToFind))]
+        public void GetByKeyword_ShouldReturnExpectedResult_WhenFilteringKeywordExistsInRepository(string keyword,
+            IEnumerable<ProjectDto> projectDtos)
+        {
+            _projectRepositoryMock = new Mock<IRepository<Project>>(MockBehavior.Strict);
+            _projectRepositoryMock.Setup(p => p.GetAll()).Returns(new List<Project>(Projects));
+            _testingProjectsService = new ProjectsService(_projectRepositoryMock.Object, _mapper);
+
+            var result = _testingProjectsService.GetByKeyword(keyword);
+
+            result.Should().BeEquivalentTo(projectDtos);
+        }
+
+        [TestCaseSource(typeof(ProjectsServiceTests), nameof(FilteringCasesWhenNotExistItemsToFind))]
+        public void GetByKeyword_ShouldReturnNull_WhenFilteringKeywordDoesntExistsInRepository(string keyword)
+        {
+            _projectRepositoryMock = new Mock<IRepository<Project>>(MockBehavior.Strict);
+            _projectRepositoryMock.Setup(p => p.GetAll()).Returns(new List<Project>(Projects));
+            _testingProjectsService = new ProjectsService(_projectRepositoryMock.Object, _mapper);
+
+            var result = _testingProjectsService.GetByKeyword(keyword);
+
+            result.Should().BeNull();
         }
     }
 }

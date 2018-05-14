@@ -37,7 +37,8 @@ namespace ProjectManagement.BLL.Services.Base
 
         public void Create(TEntityDto entityDto)
         {
-            throw new System.NotImplementedException();
+            Ensure.Any.IsNotNull(entityDto);
+            _repository.Create(_mapper.Map<TEntity>(entityDto));
         }
 
         public void Update(TEntityDto entityDto)
