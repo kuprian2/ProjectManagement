@@ -28,7 +28,11 @@ namespace ProjectManagement.BLL.Services.Base
 
         public IEnumerable<TEntityDto> GetAll()
         {
-            throw new System.NotImplementedException();
+            var entities = _repository.GetAll();
+
+            Ensure.Any.IsNotNull(entities);
+
+            return _mapper.Map<IEnumerable<TEntityDto>>(entities);
         }
 
         public void Create(TEntityDto entityDto)
