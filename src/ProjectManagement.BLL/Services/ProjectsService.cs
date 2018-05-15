@@ -19,8 +19,11 @@ namespace ProjectManagement.BLL.Services
         public IEnumerable<ProjectDto> GetByKeyword(string keyword)
         {
             Ensure.String.IsNotNullOrWhiteSpace(keyword);
+            var lowerKeyword = keyword.ToLower();
             return GetAll().Where(x =>
-                x.Information.Contains(keyword) || x.Name.Contains(keyword) || x.ShortInformation.Contains(keyword));
+                x.Information.ToLower().Contains(lowerKeyword) || x.Name.ToLower().Contains(lowerKeyword) ||
+                x.ShortInformation.ToLower().Contains(lowerKeyword))
+                .ToList();
         }
     }
 }

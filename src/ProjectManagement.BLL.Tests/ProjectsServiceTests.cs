@@ -9,6 +9,7 @@ using ProjectManagement.DAL.Contracts.Domain;
 using ProjectManagement.DAL.Contracts.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ProjectManagement.BLL.Tests
 {
@@ -74,8 +75,8 @@ namespace ProjectManagement.BLL.Tests
             }
         };
 
-        private static readonly List<int> ExistingIdentifiers = new List<int> { 0, 1, 2};
-        private static readonly List<int> NonExistingIdentifiers = new List<int> { -1, 7, 3 };
+        private static readonly List<int> ExistingIdentifiers = new List<int> { 1, 2, 3 };
+        private static readonly List<int> NonExistingIdentifiers = new List<int> { -1, 7, 7 };
 
         private static IEnumerable<TestCaseData> CorrectIdentifiersCases { get; set; } = new List<TestCaseData>
         {
@@ -179,7 +180,7 @@ namespace ProjectManagement.BLL.Tests
             new object[] {"iNfO", new List<ProjectDto>(ProjectDtos)},
             new object[] {"1", new List<ProjectDto> {ProjectDtos[0]}},
             new object[] {"2", new List<ProjectDto> {ProjectDtos[1]}},
-            new object[] {"3", new List<ProjectDto> {ProjectDtos[2], ProjectDtos[2]}},
+            new object[] {"3", new List<ProjectDto> {ProjectDtos[2]}},
             new object[] {"i", new List<ProjectDto>(ProjectDtos)},
         };
 
@@ -198,18 +199,6 @@ namespace ProjectManagement.BLL.Tests
             _mapper = new MapperConfiguration(cfg =>
                 cfg.AddProfile(new MappingProfile()))
                 .CreateMapper();
-        }
-
-        [Test]
-        public void GetAll_ShouldReturnExpectedResult_Always()
-        {
-            _projectRepositoryMock = new Mock<IRepository<Project>>(MockBehavior.Strict);
-            _projectRepositoryMock.Setup(p => p.GetAll()).Returns(new List<Project>(Projects));
-            _testingProjectsService = new ProjectsService(_projectRepositoryMock.Object, _mapper);
-
-            var result = _testingProjectsService.GetAll();
-
-            result.Should().BeEquivalentTo(ProjectDtos);
         }
 
         [TestCaseSource(typeof(ProjectsServiceTests), nameof(CorrectIdentifiersCases))]
@@ -235,6 +224,18 @@ namespace ProjectManagement.BLL.Tests
             var result = _testingProjectsService.Get(id);
 
             result.Should().BeNull();
+        }
+
+        [Test]
+        public void Get_ShouldThrowArgumentException_WhenIdIsZero()
+        {
+            _projectRepositoryMock = new Mock<IRepository<Project>>(MockBehavior.Strict);
+            _projectRepositoryMock.Setup(p => p.Get(0)).Throws<ArgumentException>();
+            _testingProjectsService = new ProjectsService(_projectRepositoryMock.Object, _mapper);
+
+            Action getActionWithZero = () => _testingProjectsService.Get(0);
+
+            getActionWithZero.Should().Throw<ArgumentException>();
         }
 
         [TestCaseSource(typeof(ProjectsServiceTests), nameof(CorrectIdentifiersCases))]
@@ -271,68 +272,40 @@ namespace ProjectManagement.BLL.Tests
             deleted.Should().BeFalse();
         }
 
-        [TestCaseSource(typeof(ProjectsServiceTests), nameof(EntitiesExistingIdentifiersCases))]
-        public void Update_ShouldChangeItemInRepository_WhenExistingIdInRepository(Project project, ProjectDto projectDto)
+        [Test]
+        public void Delete_ShouldThrowArgumentException_WhenIdIsZero()
         {
-            var updated = false;
             _projectRepositoryMock = new Mock<IRepository<Project>>(MockBehavior.Strict);
-            _projectRepositoryMock.Setup(p => p.Update(project)).Callback(() =>
-            {
-                updated = Projects.Exists(x => x.Id == project.Id);
-            });
+            _projectRepositoryMock.Setup(p => p.Delete(0)).Throws<ArgumentException>();
             _testingProjectsService = new ProjectsService(_projectRepositoryMock.Object, _mapper);
 
-            _testingProjectsService.Update(projectDto);
+            Action deleteByZeroAction = () => _testingProjectsService.Delete(0);
 
-            updated.Should().BeTrue();
+            deleteByZeroAction.Should().Throw<ArgumentException>();
         }
 
-        [TestCaseSource(typeof(ProjectsServiceTests), nameof(EntitiesNonExistingIdentifiersCases))]
-        public void Update_ShouldNotChangeRepository_WhenNonExistingIdInRepository(Project project, ProjectDto projectDto)
+        [Test]
+        public void Update_ShouldThrowArgumentNullException_WhenEntitiyIsNull()
         {
-            var updated = false;
             _projectRepositoryMock = new Mock<IRepository<Project>>(MockBehavior.Strict);
-            _projectRepositoryMock.Setup(p => p.Update(project)).Callback(() =>
-            {
-                updated = Projects.Exists(x => x.Id == project.Id);
-            });
+            _projectRepositoryMock.Setup(p => p.Update(null)).Throws<ArgumentNullException>();
             _testingProjectsService = new ProjectsService(_projectRepositoryMock.Object, _mapper);
 
-            _testingProjectsService.Update(projectDto);
+            Action updateNullEntityAction = () => _testingProjectsService.Update(null);
 
-            updated.Should().BeFalse();
+            updateNullEntityAction.Should().Throw<ArgumentNullException>();
         }
 
-        [TestCaseSource(typeof(ProjectsServiceTests), nameof(EntitiesExistingIdentifiersCases))]
-        public void Create_ShouldNotChangeRepository_WhenExistingIdInRepository(Project project, ProjectDto projectDto)
+        [Test]
+        public void Create_ShouldThrowArgumentNullException_WhenEntitiyIsNull()
         {
-            var created = false;
             _projectRepositoryMock = new Mock<IRepository<Project>>(MockBehavior.Strict);
-            _projectRepositoryMock.Setup(p => p.Create(project)).Callback(() =>
-            {
-                created = !Projects.Exists(x => x.Id == project.Id);
-            });
+            _projectRepositoryMock.Setup(p => p.Create(null)).Throws<ArgumentNullException>();
             _testingProjectsService = new ProjectsService(_projectRepositoryMock.Object, _mapper);
 
-            _testingProjectsService.Create(projectDto);
+            Action createNullEntityAction = () => _testingProjectsService.Create(null);
 
-            created.Should().BeTrue();
-        }
-
-        [TestCaseSource(typeof(ProjectsServiceTests), nameof(EntitiesNonExistingIdentifiersCases))]
-        public void Create_ShouldCreateNewItemInRepository_WhenNonExistingIdInRepository(Project project, ProjectDto projectDto)
-        {
-            var created = false;
-            _projectRepositoryMock = new Mock<IRepository<Project>>(MockBehavior.Strict);
-            _projectRepositoryMock.Setup(p => p.Create(project)).Callback(() =>
-            {
-                created = !Projects.Exists(x => x.Id == project.Id);
-            });
-            _testingProjectsService = new ProjectsService(_projectRepositoryMock.Object, _mapper);
-
-            _testingProjectsService.Create(projectDto);
-
-            created.Should().BeFalse();
+            createNullEntityAction.Should().Throw<ArgumentNullException>();
         }
 
         [TestCaseSource(typeof(ProjectsServiceTests), nameof(FilteringCasesWhenExistItemsToFind))]
@@ -349,15 +322,15 @@ namespace ProjectManagement.BLL.Tests
         }
 
         [TestCaseSource(typeof(ProjectsServiceTests), nameof(FilteringCasesWhenNotExistItemsToFind))]
-        public void GetByKeyword_ShouldReturnNull_WhenFilteringKeywordDoesntExistsInRepository(string keyword)
+        public void GetByKeyword_ShouldReturnEmptyList_WhenFilteringKeywordDoesntExistsInRepository(string keyword)
         {
             _projectRepositoryMock = new Mock<IRepository<Project>>(MockBehavior.Strict);
             _projectRepositoryMock.Setup(p => p.GetAll()).Returns(new List<Project>(Projects));
             _testingProjectsService = new ProjectsService(_projectRepositoryMock.Object, _mapper);
 
-            var result = _testingProjectsService.GetByKeyword(keyword);
+            var result = _testingProjectsService.GetByKeyword(keyword).ToList();
 
-            result.Should().BeNull();
+            result.Count.Should().Be(0);
         }
     }
 }
