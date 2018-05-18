@@ -4,6 +4,7 @@ using ProjectManagement.BLL.Contracts.Dto.Base;
 using ProjectManagement.BLL.Contracts.Services.Base;
 using ProjectManagement.DAL.Contracts.Domain.Base;
 using System.Collections.Generic;
+using System.Linq;
 using ProjectManagement.DAL.Contracts.Repositories;
 
 namespace ProjectManagement.BLL.Services.Base
@@ -38,6 +39,7 @@ namespace ProjectManagement.BLL.Services.Base
         public void Create(TEntityDto entityDto)
         {
             Ensure.Any.IsNotNull(entityDto);
+            entityDto.Id = _repository.GetAll().OrderBy(x => x.Id).Last().Id + 1;
             _repository.Create(_mapper.Map<TEntity>(entityDto));
         }
 

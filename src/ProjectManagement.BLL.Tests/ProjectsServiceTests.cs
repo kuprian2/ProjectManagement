@@ -78,104 +78,20 @@ namespace ProjectManagement.BLL.Tests
         private static readonly List<int> ExistingIdentifiers = new List<int> { 1, 2, 3 };
         private static readonly List<int> NonExistingIdentifiers = new List<int> { -1, 7, 7 };
 
-        private static IEnumerable<TestCaseData> CorrectIdentifiersCases { get; set; } = new List<TestCaseData>
+        private static IEnumerable<TestCaseData> CorrectIdentifiersCases { get; } = new List<TestCaseData>
         {
             new TestCaseData(ExistingIdentifiers[0]),
             new TestCaseData(ExistingIdentifiers[1]),
             new TestCaseData(ExistingIdentifiers[2]),
         };
-        private static IEnumerable<TestCaseData> IncorrectIdentifiersCases { get; set; } = new List<TestCaseData>
+        private static IEnumerable<TestCaseData> IncorrectIdentifiersCases { get; } = new List<TestCaseData>
         {
             new TestCaseData(NonExistingIdentifiers[0]),
             new TestCaseData(NonExistingIdentifiers[1]),
             new TestCaseData(NonExistingIdentifiers[2]),
         };
 
-        private static object[] EntitiesExistingIdentifiersCases = new object[]
-        {
-            new object[]
-            {
-                new Project
-                {
-                    Id = 1,
-                    Name = "Project11111",
-                    CreatureDate = new DateTime(2001, 1, 1),
-                    Information = "Info11111",
-                    ShortInformation = "Short info11111"
-                },
-                new ProjectDto
-                {
-                    Id = 1,
-                    Name = "Project11111",
-                    CreatureDate = new DateTime(2001, 1, 1),
-                    Information = "Info11111",
-                    ShortInformation = "Short info11111"
-                }
-            },
-            new object[]
-            {
-                new Project
-                {
-                    Id = 2,
-                    Name = "Project22222",
-                    CreatureDate = new DateTime(2002, 2, 2),
-                    Information = "Info22222",
-                    ShortInformation = "Short info22222"
-                },
-                new ProjectDto
-                {
-                    Id = 2,
-                    Name = "Project11111",
-                    CreatureDate = new DateTime(2002, 2, 2),
-                    Information = "Info22222",
-                    ShortInformation = "Short info22222"
-                }
-            }
-        };
-        private static object[] EntitiesNonExistingIdentifiersCases = new object[]
-        {
-            new object[]
-            {
-                new Project
-                {
-                    Id = 4,
-                    Name = "Project4",
-                    CreatureDate = new DateTime(2004, 4, 4),
-                    Information = "Info4",
-                    ShortInformation = "Short info4"
-                },
-                new ProjectDto
-                {
-                    Id = 4,
-                    Name = "Project4",
-                    CreatureDate = new DateTime(2004, 4, 4),
-                    Information = "Info4",
-                    ShortInformation = "Short info4"
-                }
-            },
-            new object[]
-            {
-                new Project
-                {
-                    Id = 5,
-                    Name = "Project55555",
-                    CreatureDate = new DateTime(2005, 5, 5),
-                    Information = "Info55555",
-                    ShortInformation = "Short info55555"
-                },
-                new ProjectDto
-                {
-                    Id = 5,
-                    Name = "Project55555",
-                    CreatureDate = new DateTime(2005, 5, 5),
-                    Information = "Info55555",
-                    ShortInformation = "Short info55555"
-                }
-            }
-        };
-
-        private static object[] FilteringCasesWhenExistItemsToFind = new object[]
-        {
+        private static object[] FilteringCasesWhenExistItemsToFind = {
             new object[] {"Info", new List<ProjectDto>(ProjectDtos)},
             new object[] {"iNfO", new List<ProjectDto>(ProjectDtos)},
             new object[] {"1", new List<ProjectDto> {ProjectDtos[0]}},
@@ -184,8 +100,7 @@ namespace ProjectManagement.BLL.Tests
             new object[] {"i", new List<ProjectDto>(ProjectDtos)},
         };
 
-        private static object[] FilteringCasesWhenNotExistItemsToFind = new object[]
-        {
+        private static object[] FilteringCasesWhenNotExistItemsToFind = {
             new object[] {"sargdr"},
             new object[] {"shjdukflgil"},
             new object[] {"fydklipopop"},
