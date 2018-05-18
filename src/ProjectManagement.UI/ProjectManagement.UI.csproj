@@ -40,7 +40,14 @@
     <Reference Include="AutoMapper, Version=6.2.2.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.6.2.2\lib\net45\AutoMapper.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Runtime.Serialization" />
@@ -124,6 +131,10 @@
     <ProjectReference Include="..\ProjectManagement.DAL.Contracts\ProjectManagement.DAL.Contracts.csproj">
       <Project>{DC538D2B-0339-4ADC-B556-4E15DC1F645E}</Project>
       <Name>ProjectManagement.DAL.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ProjectManagement.DAL.EF\ProjectManagement.DAL.EF.csproj">
+      <Project>{5b9b8eee-b98c-4385-8116-7ecdc27a1e80}</Project>
+      <Name>ProjectManagement.DAL.EF</Name>
     </ProjectReference>
     <ProjectReference Include="..\ProjectManagement.DAL\ProjectManagement.DAL.ADO.csproj">
       <Project>{8715F74D-0817-46CD-A0A5-29D15809BEEA}</Project>

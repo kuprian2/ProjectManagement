@@ -39,7 +39,6 @@ namespace ProjectManagement.BLL.Services.Base
         public void Create(TEntityDto entityDto)
         {
             Ensure.Any.IsNotNull(entityDto);
-            entityDto.Id = _repository.GetAll().OrderBy(x => x.Id).Last().Id + 1;
             _repository.Create(_mapper.Map<TEntity>(entityDto));
         }
 

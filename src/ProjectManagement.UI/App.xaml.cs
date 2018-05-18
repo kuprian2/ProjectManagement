@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -10,7 +11,8 @@ using ProjectManagement.BLL.Contracts.Services;
 using ProjectManagement.BLL.Services;
 using ProjectManagement.DAL.Contracts.Domain;
 using ProjectManagement.DAL.Contracts.Repositories;
-using ProjectManagement.DAL.Repositories;
+using ProjectManagement.DAL.EF.EF;
+using ProjectManagement.DAL.EF.Repositories;
 using ProjectManagement.UI.Views;
 
 namespace ProjectManagement.UI
@@ -36,8 +38,9 @@ namespace ProjectManagement.UI
             builder.UseAutoMapper();
 
             var conn = ConfigurationManager.ConnectionStrings["ProjectManagementConnection"].ConnectionString;
-            builder.RegisterType<ProjectsRepository>().As<IRepository<Project>>().WithParameter("connectionString", conn);
-
+            //builder.RegisterType<ProjectsRepository>().As<IRepository<Project>>().WithParameter("connectionString", conn);
+            builder.RegisterType<ProjectsRepository>().As<IRepository<Project>>();
+            builder.RegisterType<ApplicationDbContext>().As<DbContext>().WithParameter("connectionString", conn);
             builder.RegisterType<ProjectsService>().As<IProjectsService>();
 
             builder.RegisterType<ProjectCreationWindow>();
