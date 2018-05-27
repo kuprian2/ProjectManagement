@@ -49,8 +49,10 @@
   <ItemGroup>
     <Compile Include="Configuration\MappingProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\AdaptedWrongProjectsService.cs" />
     <Compile Include="Services\Base\Service.cs" />
     <Compile Include="Services\ProjectsService.cs" />
+    <Compile Include="Services\WrongProjectsService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

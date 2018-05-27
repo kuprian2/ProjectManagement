@@ -41,7 +41,7 @@ namespace ProjectManagement.UI
             //builder.RegisterType<ProjectsRepository>().As<IRepository<Project>>().WithParameter("connectionString", conn);
             builder.RegisterType<ProjectsRepository>().As<IRepository<Project>>();
             builder.RegisterType<ApplicationDbContext>().As<DbContext>().WithParameter("connectionString", conn);
-            builder.RegisterType<ProjectsService>().As<IProjectsService>();
+            builder.RegisterType<AdaptedWrongProjectsService>().As<IProjectsService>();
 
             builder.RegisterType<ProjectCreationWindow>();
 

@@ -2,8 +2,6 @@
 using System.Globalization;
 using System.Windows;
 using System.Windows.Documents;
-using Autofac;
-using AutoMapper;
 using ProjectManagement.BLL.Contracts.Dto;
 using ProjectManagement.BLL.Contracts.Services;
 
@@ -16,7 +14,7 @@ namespace ProjectManagement.UI.Views
     {
         private readonly IProjectsService _projectsService;
 
-        public ProjectCreationWindow(ILifetimeScope lifetimeScope, IProjectsService projectsService, IMapper mapper)
+        public ProjectCreationWindow(IProjectsService projectsService)
         {
             _projectsService = projectsService;
             InitializeComponent();
