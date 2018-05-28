@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using EnsureThat;
 using ProjectManagement.BLL.Contracts.Dto;
 using ProjectManagement.BLL.Contracts.Services;
@@ -24,6 +25,19 @@ namespace ProjectManagement.BLL.Services
                 x.Information.ToLower().Contains(lowerKeyword) || x.Name.ToLower().Contains(lowerKeyword) ||
                 x.ShortInformation.ToLower().Contains(lowerKeyword))
                 .ToList();
+        }
+
+        public event EventHandler<EventArgs> Created;
+
+        protected void OnCreated()
+        {
+            Created?.Invoke(this, EventArgs.Empty);
+        }
+
+        public override void Create(ProjectDto entityDto)
+        {
+            base.Create(entityDto);
+            OnCreated();
         }
     }
 }

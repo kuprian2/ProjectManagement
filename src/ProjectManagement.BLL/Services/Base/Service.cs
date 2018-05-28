@@ -36,7 +36,7 @@ namespace ProjectManagement.BLL.Services.Base
             return _mapper.Map<IEnumerable<TEntityDto>>(entities);
         }
 
-        public void Create(TEntityDto entityDto)
+        public virtual void Create(TEntityDto entityDto)
         {
             Ensure.Any.IsNotNull(entityDto);
             _repository.Create(_mapper.Map<TEntity>(entityDto));

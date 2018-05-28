@@ -17,6 +17,7 @@ namespace ProjectManagement.UI.Views
         public ProjectCreationWindow(IProjectsService projectsService)
         {
             _projectsService = projectsService;
+            _projectsService.Created += (sender, args) => MessageBox.Show("New project added!");
             InitializeComponent();
         }
 

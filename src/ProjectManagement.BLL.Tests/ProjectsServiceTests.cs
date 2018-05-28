@@ -247,5 +247,19 @@ namespace ProjectManagement.BLL.Tests
 
             result.Count.Should().Be(0);
         }
+
+        [Test]
+        public void Create_ShouldRaiseCreatedEvent_WhenCreationSuccessfull()
+        {
+            _projectRepositoryMock = new Mock<IRepository<Project>>(MockBehavior.Strict);
+            _projectRepositoryMock.Setup(p => p.Create(It.IsAny<Project>())).Callback(() => {});
+            _testingProjectsService = new ProjectsService(_projectRepositoryMock.Object, _mapper);
+
+            using (var monitoredService = _testingProjectsService.Monitor())
+            {
+                _testingProjectsService.Create(ProjectDtos[0]);
+                monitoredService.Should().Raise("Created");
+            }
+        }
     }
 }

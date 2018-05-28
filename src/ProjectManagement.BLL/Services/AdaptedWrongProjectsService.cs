@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using ProjectManagement.BLL.Contracts.Dto;
 using ProjectManagement.BLL.Contracts.Services;
 using ProjectManagement.DAL.Contracts.Domain;
@@ -16,6 +17,19 @@ namespace ProjectManagement.BLL.Services
             _wrongProjectsService = new WrongProjectsService(repository, mapper);
         }
 
+        public event EventHandler<EventArgs> Created;
+
+        protected void OnCreated()
+        {
+            Created?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void Create(ProjectDto entityDto)
+        {
+            _wrongProjectsService.CreateProject(entityDto);
+            OnCreated();
+        }
+
         public ProjectDto Get(int id)
         {
             return _wrongProjectsService.SelectProjectById(id);
@@ -24,11 +38,6 @@ namespace ProjectManagement.BLL.Services
         public IEnumerable<ProjectDto> GetAll()
         {
             return _wrongProjectsService.SelectAllProjects();
-        }
-
-        public void Create(ProjectDto entityDto)
-        {
-            _wrongProjectsService.CreateProject(entityDto);
         }
 
         public void Update(ProjectDto entityDto)
