@@ -2,6 +2,9 @@
 
 namespace ProjectManagement.UI.Models
 {
+    /// <summary>
+    /// Model of Project to show.
+    /// </summary>
     public class ProjectFullModel
     {
         public string Name { get; set; }

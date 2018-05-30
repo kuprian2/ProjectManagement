@@ -1,12 +1,17 @@
-﻿using System;
-using System.Linq;
-using Autofac;
+﻿using Autofac;
 using AutoMapper;
+using System;
+using System.Linq;
 
 namespace ProjectManagement.UI
 {
     public static class ContainerBuilderExtensionMethods
     {
+        /// <summary>
+        /// Collects all classes of <see cref="AutoMapper"/>`s <see cref="Profile"/> from the whole solution and creates <see cref="AutoMapper"/>`s <see cref="IMapper"/>.
+        /// </summary>
+        /// <param name="builder"><see cref="Autofac"/>`s container builder.</param>
+        /// <returns></returns>
         public static ContainerBuilder UseAutoMapper(this ContainerBuilder builder)
         {
             if (builder == null) throw new NullReferenceException();

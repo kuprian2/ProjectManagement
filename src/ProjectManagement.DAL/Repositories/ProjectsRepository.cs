@@ -7,19 +7,34 @@ using System.Data.SqlClient;
 
 namespace ProjectManagement.DAL.Repositories
 {
+    /// <summary>
+    /// Implementation of <see cref="IRepository{TEntity}"/> parametrized with <see cref="Project"/> using ADO.NET.
+    /// </summary>
     public class ProjectsRepository : IRepository<Project>
     {
         private readonly SqlConnection _connection;
 
+        /// <summary>
+        /// Creates an instance of <see cref="ProjectsRepository"/> using specific connection string.
+        /// </summary>
+        /// <param name="connectionString"></param>
         public ProjectsRepository(string connectionString)
         {
             _connection = new SqlConnection(connectionString);
         }
 
+        /// <summary>
+        /// Creates an instance of <see cref="ProjectsRepository"/> using default connection string.
+        /// </summary>
         public ProjectsRepository() : this(@"Data Source=.\SQLEXPRESS;Initial Catalog=ProjectManagement;Integrated Security=True")
         {
         }
 
+        /// <summary>
+        /// Creates the item in data source with given <paramref name="entity"/>.
+        /// </summary>
+        /// <param name="entity">Given entity.</param>
+        /// <exception cref="DalException"></exception>
         public void Create(Project entity)
         {
             try
@@ -52,6 +67,11 @@ namespace ProjectManagement.DAL.Repositories
             }
         }
 
+        /// <summary>
+        /// Returns an object with specified value of key in data source.
+        /// </summary>
+        /// <param name="id">Key to find an object.</param>
+        /// <exception cref="DalException"></exception>
         public void Delete(int id)
         {
             try
@@ -74,6 +94,12 @@ namespace ProjectManagement.DAL.Repositories
             }
         }
 
+        /// <summary>
+        /// Returns an object of type <see cref="Project"/> with specified value of key from data source.
+        /// </summary>
+        /// <param name="id">Key to find an object.</param>
+        /// <returns>Returns an object with specified value of key from data source.</returns>
+        /// <exception cref="DalException"></exception>
         public Project Get(int id)
         {
             try
@@ -111,6 +137,11 @@ namespace ProjectManagement.DAL.Repositories
             }
         }
 
+        /// <summary>
+        /// Returns all objects of type <see cref="Project"/> from data source.
+        /// </summary>
+        /// <returns>Returns all objects of type <see cref="Project"/> from data source.</returns>
+        /// <exception cref="DalException"></exception>
         public IEnumerable<Project> GetAll()
         {
             try
@@ -148,6 +179,11 @@ namespace ProjectManagement.DAL.Repositories
             }
         }
 
+        /// <summary>
+        /// Updates the item in data source with given <paramref name="entity"/>.
+        /// </summary>
+        /// <param name="entity">Given entity.</param>
+        /// <exception cref="DalException"></exception>
         public void Update(Project entity)
         {
             try

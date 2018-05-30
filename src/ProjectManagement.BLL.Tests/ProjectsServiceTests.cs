@@ -13,6 +13,9 @@ using System.Linq;
 
 namespace ProjectManagement.BLL.Tests
 {
+    /// <summary>
+    /// Unit test for <see cref="ProjectsService"/> class.
+    /// </summary>
     [TestFixture]
     public class ProjectsServiceTests
     {

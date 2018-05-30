@@ -3,6 +3,9 @@ using System;
 
 namespace ProjectManagement.DAL.Contracts.Domain
 {
+    /// <summary>
+    /// Type for Project entities in model.
+    /// </summary>
     public class Project : Entity
     {
         public string Name { get; set; }

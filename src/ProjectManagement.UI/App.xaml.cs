@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-using Autofac;
+﻿using Autofac;
 using ProjectManagement.BLL.Contracts.Services;
 using ProjectManagement.BLL.Services;
 using ProjectManagement.DAL.Contracts.Domain;
@@ -14,6 +6,9 @@ using ProjectManagement.DAL.Contracts.Repositories;
 using ProjectManagement.DAL.EF.EF;
 using ProjectManagement.DAL.EF.Repositories;
 using ProjectManagement.UI.Views;
+using System.Configuration;
+using System.Data.Entity;
+using System.Windows;
 
 namespace ProjectManagement.UI
 {
@@ -22,6 +17,10 @@ namespace ProjectManagement.UI
     /// </summary>
     public partial class App : Application
     {
+        /// <summary>
+        /// Method called on Application start.
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
@@ -33,6 +32,11 @@ namespace ProjectManagement.UI
             mainWindow.Show();
         }
 
+        /// <summary>
+        /// Method to build <see cref="Autofac"/> container.
+        /// </summary>
+        /// <param name="builder"><see cref="Autofac"/>`s container builder.</param>
+        /// <returns>Builded container.</returns>
         private static IContainer ConfigureServices(ContainerBuilder builder)
         {
             builder.UseAutoMapper();

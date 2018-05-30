@@ -2,6 +2,9 @@
 
 namespace ProjectManagement.DAL.Contracts.Exceptions
 {
+    /// <summary>
+    /// Exception for Data Access Layer.
+    /// </summary>
     public class DalException : Exception
     {
         public DalException(string message) : base(message)

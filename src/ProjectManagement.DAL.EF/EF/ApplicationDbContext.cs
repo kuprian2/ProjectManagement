@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ProjectManagement.DAL.Contracts.Domain;
 using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ProjectManagement.DAL.Contracts.Domain;
 
 namespace ProjectManagement.DAL.EF.EF
 {
+    /// <summary>
+    /// Type of <see cref="DbContext"/> for current model.
+    /// </summary>
     public class ApplicationDbContext : DbContext
     {
         public ApplicationDbContext(string connectionString)

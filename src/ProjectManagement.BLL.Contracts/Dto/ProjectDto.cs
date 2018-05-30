@@ -3,6 +3,9 @@ using System;
 
 namespace ProjectManagement.BLL.Contracts.Dto
 {
+    /// <summary>
+    /// Dto type for projects on current model.
+    /// </summary>
     public class ProjectDto : EntityDto
     {
         public string Name { get; set; }
